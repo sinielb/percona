@@ -480,7 +480,7 @@ backups:
 #        value: connection-poolers
 
 pmm:
-  enabled: false
+  enabled: true
   image:
     repository: percona/pmm-client
     tag: 2.42.0
