@@ -323,13 +323,13 @@ proxy:
 #        global:
 #          pool_mode: transaction
 
-# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
-# backups:
-#   pgbackrest:
-# #    metadata:
-# #    labels:
-#     image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbackrest2.51-1
-# FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
+
+backups:
+  pgbackrest:
+#    metadata:
+#    labels:
+    image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbackrest2.51-1
+
 
 #    containers:
 #      pgbackrest:
@@ -387,18 +387,18 @@ proxy:
 #      repo2-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo2
 #      repo3-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo3
 #      repo4-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo4
-# FIXME START DESCOMENTAR PARA HABILITAR BACKUPS
-    # repoHost:
-    #   affinity:
-    #     podAntiAffinity:
-    #       preferredDuringSchedulingIgnoredDuringExecution:
-    #       - weight: 1
-    #         podAffinityTerm:
-    #           labelSelector:
-    #             matchLabels:
-    #               postgres-operator.crunchydata.com/data: pgbackrest
-    #           topologyKey: kubernetes.io/hostname
-# FIXME END DESCOMENTAR PARA HABILITAR BACKUPS
+
+    repoHost:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/data: pgbackrest
+              topologyKey: kubernetes.io/hostname
+
 
 #      tolerations:
 #      - effect: NoSchedule
@@ -435,27 +435,27 @@ proxy:
 #        - name: net.ipv4.tcp_keepalive_intvl
 #          value: "60"
 
-# FIXME START DESCOMENTAR PARA HABILITAR BACKUPS
-#     manual:
-#       repoName: repo1
-#       options:
-#       - --type=full
-#     repos:
-#     - name: repo1
-#       schedules:
-#         full: "0 0 * * 6"
-# #        differential: "0 1 * * 1-6"
-# #        incremental: "0 1 * * 1-6"
-#       volume:
-#         volumeClaimSpec:
-# #          storageClassName: ""
-#           accessModes:
-#           - ReadWriteOnce
-#           resources:
-#             requests:
-#               storage: 1Gi
 
-# FIXME END DESCOMENTAR PARA HABILITAR BACKUPS
+    manual:
+      repoName: repo1
+      options:
+      - --type=full
+    repos:
+    - name: repo1
+      schedules:
+        full: "0 19 * * 5"
+#        differential: "0 1 * * 1-6"
+#        incremental: "0 1 * * 1-6"
+      volume:
+        volumeClaimSpec:
+#          storageClassName: ""
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+
+
 #    - name: repo2
 #      s3:
 #        bucket: "<YOUR_AWS_S3_BUCKET_NAME>"
