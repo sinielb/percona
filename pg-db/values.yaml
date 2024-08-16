@@ -240,12 +240,11 @@ instances:
 #       requests:
 #         storage: 5Gi
 
-# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
-# proxy:
-#   pgBouncer:
-#     replicas: 3
-#     image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbouncer1.22.1
-# FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
+
+proxy:
+  pgBouncer:
+    replicas: 1
+    image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbouncer1.22.1
 
 #    exposeSuperusers: true
 #    resources:
@@ -267,17 +266,17 @@ instances:
 #        type: LoadBalancer
 #        loadBalancerSourceRanges:
 #          - 10.0.0.0/8
-# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
-    # affinity:
-    #   podAntiAffinity:
-    #     preferredDuringSchedulingIgnoredDuringExecution:
-    #     - weight: 1
-    #       podAffinityTerm:
-    #         labelSelector:
-    #           matchLabels:
-    #             postgres-operator.crunchydata.com/role: pgbouncer
-    #         topologyKey: kubernetes.io/hostname
-  # FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          podAffinityTerm:
+            labelSelector:
+              matchLabels:
+                postgres-operator.crunchydata.com/role: pgbouncer
+            topologyKey: kubernetes.io/hostname
+
 
 #      tolerations:
 #      - effect: NoSchedule
@@ -388,7 +387,7 @@ instances:
 #      repo2-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo2
 #      repo3-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo3
 #      repo4-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo4
-# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
+# FIXME START DESCOMENTAR PARA HABILITAR BACKUPS
     # repoHost:
     #   affinity:
     #     podAntiAffinity:
@@ -399,7 +398,7 @@ instances:
     #             matchLabels:
     #               postgres-operator.crunchydata.com/data: pgbackrest
     #           topologyKey: kubernetes.io/hostname
-# FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
+# FIXME END DESCOMENTAR PARA HABILITAR BACKUPS
 
 #      tolerations:
 #      - effect: NoSchedule
