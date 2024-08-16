@@ -118,7 +118,9 @@ customReplicationTLSSecret:
 #       labels:
 #         test-label: value
 expose:
-   type: LoadBalancer
+  type: LoadBalancer
+service:
+  type: LoadBalancer
 # expose:
 #   annotations:
 #     my-annotation: value1
