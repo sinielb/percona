@@ -448,7 +448,7 @@ backups:
 #        incremental: "0 1 * * 1-6"
       volume:
         volumeClaimSpec:
-#          storageClassName: ""
+          storageClassName: "local-path"
           accessModes:
           - ReadWriteOnce
           resources:
