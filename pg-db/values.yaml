@@ -136,9 +136,28 @@ customReplicationTLSSecret:
 #     - 10.0.0.0/8
 
 instances:
-- name: instance1
-  replicas: 3
-
+- name: instancema
+  replicas: 1
+  dataVolumeClaimSpec:
+    accessModes:
+      - 'ReadWriteOnce'
+    storageClassName: "local-path"
+    resources:
+      requests:
+        storage: 5Gi
+  tablespaceVolumes:
+    - name: "tblsma"
+      dataVolumeClaimSpec:
+        accessModes:
+          - 'ReadWriteOnce'
+        storageClassName: "local-path"
+        resources:
+          requests:
+            storage: 5Gi
+  resources:
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -213,18 +232,21 @@ instances:
 #      requests:
 #        storage: 1Gi
 #
-  dataVolumeClaimSpec:
-#    storageClassName: standard
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 5Gi
+#   dataVolumeClaimSpec:
+# #    storageClassName: standard
+#     accessModes:
+#     - ReadWriteOnce
+#     resources:
+#       requests:
+#         storage: 5Gi
 
-proxy:
-  pgBouncer:
-    replicas: 3
-    image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbouncer1.22.1
+# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
+# proxy:
+#   pgBouncer:
+#     replicas: 3
+#     image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbouncer1.22.1
+# FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
+
 #    exposeSuperusers: true
 #    resources:
 #      limits:
@@ -245,16 +267,17 @@ proxy:
 #        type: LoadBalancer
 #        loadBalancerSourceRanges:
 #          - 10.0.0.0/8
-
-    affinity:
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          podAffinityTerm:
-            labelSelector:
-              matchLabels:
-                postgres-operator.crunchydata.com/role: pgbouncer
-            topologyKey: kubernetes.io/hostname
+# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
+    # affinity:
+    #   podAntiAffinity:
+    #     preferredDuringSchedulingIgnoredDuringExecution:
+    #     - weight: 1
+    #       podAffinityTerm:
+    #         labelSelector:
+    #           matchLabels:
+    #             postgres-operator.crunchydata.com/role: pgbouncer
+    #         topologyKey: kubernetes.io/hostname
+  # FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
 
 #      tolerations:
 #      - effect: NoSchedule
@@ -301,11 +324,14 @@ proxy:
 #        global:
 #          pool_mode: transaction
 
-backups:
-  pgbackrest:
-#    metadata:
-#    labels:
-    image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbackrest2.51-1
+# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
+# backups:
+#   pgbackrest:
+# #    metadata:
+# #    labels:
+#     image: percona/percona-postgresql-operator:2.4.1-ppg16.3-pgbackrest2.51-1
+# FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
+
 #    containers:
 #      pgbackrest:
 #        resources:
@@ -362,17 +388,18 @@ backups:
 #      repo2-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo2
 #      repo3-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo3
 #      repo4-path: /pgbackrest/postgres-operator/cluster1-multi-repo/repo4
-
-    repoHost:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              labelSelector:
-                matchLabels:
-                  postgres-operator.crunchydata.com/data: pgbackrest
-              topologyKey: kubernetes.io/hostname
+# FIXME START DESCOMENTAR PARA HABILITAR pgBouncer
+    # repoHost:
+    #   affinity:
+    #     podAntiAffinity:
+    #       preferredDuringSchedulingIgnoredDuringExecution:
+    #       - weight: 1
+    #         podAffinityTerm:
+    #           labelSelector:
+    #             matchLabels:
+    #               postgres-operator.crunchydata.com/data: pgbackrest
+    #           topologyKey: kubernetes.io/hostname
+# FIXME END DESCOMENTAR PARA HABILITAR pgBouncer
 
 #      tolerations:
 #      - effect: NoSchedule
@@ -409,24 +436,27 @@ backups:
 #        - name: net.ipv4.tcp_keepalive_intvl
 #          value: "60"
 
-    manual:
-      repoName: repo1
-      options:
-      - --type=full
-    repos:
-    - name: repo1
-      schedules:
-        full: "0 0 * * 6"
-#        differential: "0 1 * * 1-6"
-#        incremental: "0 1 * * 1-6"
-      volume:
-        volumeClaimSpec:
-#          storageClassName: ""
-          accessModes:
-          - ReadWriteOnce
-          resources:
-            requests:
-              storage: 1Gi
+# FIXME START DESCOMENTAR PARA HABILITAR BACKUPS
+#     manual:
+#       repoName: repo1
+#       options:
+#       - --type=full
+#     repos:
+#     - name: repo1
+#       schedules:
+#         full: "0 0 * * 6"
+# #        differential: "0 1 * * 1-6"
+# #        incremental: "0 1 * * 1-6"
+#       volume:
+#         volumeClaimSpec:
+# #          storageClassName: ""
+#           accessModes:
+#           - ReadWriteOnce
+#           resources:
+#             requests:
+#               storage: 1Gi
+
+# FIXME END DESCOMENTAR PARA HABILITAR BACKUPS
 #    - name: repo2
 #      s3:
 #        bucket: "<YOUR_AWS_S3_BUCKET_NAME>"
